@@ -1,0 +1,26 @@
+[
+{
+  "model": "courses.subject",
+  "pk": 5,
+  "fields": {
+    "title": "sports",
+    "slug": "sports"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 6,
+  "fields": {
+    "title": "economy",
+    "slug": "economy"
+  }
+},
+{
+  "model": "courses.subject",
+  "pk": 7,
+  "fields": {
+    "title": "music",
+    "slug": "music"
+  }
+}
+]
