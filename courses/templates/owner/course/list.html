@@ -8,6 +8,7 @@
     <h3>{{course.title}}</h3>
     <a href="{% url 'course_edit' course.id %}">Edit</a>
     <a href="{% url 'course_delete' course.id %}">Delete</a>
+    <a href="{% url 'course_module_update' course.id %}">edit modules</a>
   </div>
   {% empty %}
   <p>you dont have any course</p>

@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% block title %}Edit {{course.title}}{% endblock %} {% block content %}
+<h1>Edit {{course.title}}'s modules</h1>
+<div>
+  <h2>course modules</h2>
+  <form method="post">
+    {% csrf_token %}{{formset}}{{formset.management_form}}
+    <input type="submit" value="save modules" />
+  </form>
+</div>
+{% endblock %}
