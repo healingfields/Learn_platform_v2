@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from .fields import OrderField
 
 class Subject(models.Model):
     title = models.CharField(max_length=150)
@@ -33,9 +34,13 @@ class Module(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField(max_length=150, unique=True)
     course = models.ForeignKey(Course, related_name='modules', on_delete=models.CASCADE)
+    order = OrderField(blank=True, for_fields=['course'])
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self) -> str:
-        return self.title
+        return f'{self.title}, {self.order}'
 
 class Content(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, limit_choices_to={'model__in':('text',
@@ -44,6 +49,11 @@ class Content(models.Model):
     )})
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
+    order = OrderField(blank=True, for_fields=['module'])
+
+    class Meta:
+        ordering = ['order']
+
 
 class ItemBase(models.Model):
     title = models.CharField(max_length=150)
