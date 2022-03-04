@@ -14,7 +14,7 @@ class OwnerMixin(object):
 class OwnerEditMixin(object):
     def form_valid(self, form):
         form.instance.owner = self.request.user 
-        return super().form_valid()
+        return super().form_valid(form)
 
 class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
     model = Course
@@ -22,11 +22,11 @@ class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
     success_url = reverse_lazy('owner_course_list')
 
 class OwnerCourseEditMixin(OwnerEditMixin, OwnerCourseMixin):
-    template_name = 'courses/owner/course/form.html'
+    template_name = 'owner/course/form.html'
 
 
 class OwnerCourseList(OwnerCourseMixin, ListView):
-    template_name = 'courses/owner/course/list.html'
+    template_name = 'owner/course/list.html'
     permission_required = 'courses.view_course'
     # model = Course
     # template_name = 'courses/owner/list.html'
@@ -42,7 +42,9 @@ class OwnerCourseUpdate(OwnerCourseEditMixin, UpdateView):
     permission_required = 'courses.change_course'
 
 class OwnerCourseDelete(OwnerCourseMixin, DeleteView):
+    template_name = 'owner/course/delete.html'
     permission_required = 'courses.delete_course'
+
 
 
 
