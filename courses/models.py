@@ -33,6 +33,7 @@ class Course(models.Model):
 class Module(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField(max_length=150, unique=True)
+    description = models.TextField()
     course = models.ForeignKey(Course, related_name='modules', on_delete=models.CASCADE)
     order = OrderField(blank=True, for_fields=['course'])
 
