@@ -1,10 +1,14 @@
+from re import template
 from typing import List
 from django.shortcuts import render
-from .models import Course
+from .models import Course, Module
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic.base import TemplateResponseMixin, View
+from .forms import ModuleFormSet
 
 class OwnerMixin(object):
     def get_queryset(self):
@@ -44,6 +48,29 @@ class OwnerCourseUpdate(OwnerCourseEditMixin, UpdateView):
 class OwnerCourseDelete(OwnerCourseMixin, DeleteView):
     template_name = 'owner/course/delete.html'
     permission_required = 'courses.delete_course'
+
+
+class OwnerCourseModuleUpdate(TemplateResponseMixin, View):
+    template_name = 'owner/module/formset.html'
+    course = None
+
+    def get_formest(self, data=None):
+        return ModuleFormSet(instance=self.course, data=data)
+
+    def dispatch(self, request, pk) :
+        self.course = get_object_or_404(Course, id=pk, owner=request.user)
+        return super().dispatch(request, pk)
+    
+    def get(self, request, *args, **kwargs):
+        formset = self.get_formest()
+        return self.render_to_response({'course':self.course, 'formset': formset})
+
+    def post(self, request, *args, **kwargs):
+        formset = self.get_formest(data=request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('owner_course_list')
+        return self.render_to_response({'course':self.course, 'formset': formset}) 
 
 
 
