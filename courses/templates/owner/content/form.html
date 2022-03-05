@@ -16,9 +16,9 @@ add new content
     {% endif %}
 </h1>
 <div>
-    <form action="post" action="" enctype="multipart/form-data">
-        {% csrf_token %}
+    <form action="" method="post"  enctype="multipart/form-data">
         {{form.as_p}}
+        {% csrf_token %}
         <input type="submit" value="Save contents">
     </form>
 </div>
