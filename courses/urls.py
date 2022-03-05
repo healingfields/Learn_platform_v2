@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.urls import path
 from . import views
 
@@ -11,5 +12,20 @@ urlpatterns = [
         "<pk>/module/",
         views.OwnerCourseModuleUpdate.as_view(),
         name="course_module_update",
+    ),
+    path(
+        "module/<int:module_id>/content/<model_name>/create/",
+        views.ContentCreateUpdate.as_view(),
+        name="module_content_create",
+    ),
+    path(
+        "module/<int:module_id>/content/<model_name>/<int:id>/",
+        views.ContentCreateUpdate.as_view(),
+        name="module_content_update",
+    ),
+    path(
+        "content/<int:id>/delete/",
+        views.ContentDelete.as_view(),
+        name="module_content_delete",
     ),
 ]
