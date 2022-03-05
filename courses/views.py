@@ -1,5 +1,3 @@
-from re import template
-from socket import NI_NAMEREQD
 from .models import Course, Module, Content
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -115,7 +113,7 @@ class ContentCreateUpdate(TemplateResponseMixin, View):
         form = self.get_form(self.model, instance=self.obj)
         return self.render_to_response({"form": form, "object": self.obj})
 
-    def Post(self, request, module_id, model_name, id=None):
+    def post(self, request, module_id, model_name, id=None):
         form = self.get_form(
             self.model, instance=self.obj, data=request.POST, files=request.FILES
         )
@@ -137,3 +135,12 @@ class ContentDelete(View):
         content.item.delete()
         content.delete()
         return redirect("module_content_list", module.id)
+
+
+class ModuleContentList(TemplateResponseMixin, View):
+    template_name = "owner/module/content_list.html"
+
+    def get(self, request, module_id):
+        module = get_object_or_404(Module, id=module_id, course__owner=request.user)
+
+        return self.render_to_response({"module": module})
