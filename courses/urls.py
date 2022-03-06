@@ -33,4 +33,6 @@ urlpatterns = [
         views.ModuleContentList.as_view(),
         name="module_content_list",
     ),
+    path("module/order/", views.ModuleOrder.as_view(), name="module_order"),
+    path("content/order/", views.ContentOrder.as_view(), name="content_order"),
 ]
