@@ -35,4 +35,11 @@ urlpatterns = [
     ),
     path("module/order/", views.ModuleOrder.as_view(), name="module_order"),
     path("content/order/", views.ContentOrder.as_view(), name="content_order"),
+    path("", views.CourseList.as_view(), name="course_list"),
+    path(
+        "subject/<slug:subject>",
+        views.CourseList.as_view(),
+        name="course_list_by_subject",
+    ),
+    path("<slug:slug>/", views.CourseDetails.as_view(), name="course_details"),
 ]
