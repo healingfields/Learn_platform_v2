@@ -1,13 +1,19 @@
-from .models import Course, Module, Content
+# imports from my apps
+from .models import Course, Module, Content, Subject
+from .forms import ModuleFormSet
+
+# imports from django
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.base import TemplateResponseMixin, View
-from .forms import ModuleFormSet
 from django.forms.models import modelform_factory
 from django.apps import apps
+from django.db.models import Count
+
+# imports from 3rd packcage
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 
 
@@ -165,3 +171,21 @@ class ContentOrder(CsrfExemptMixin, JsonRequestResponseMixin, View):
                 module__course__owner=request.user,
             ).update(order=order)
         return self.render_json_response({"saved": "ok"})
+
+
+class CourseList(TemplateResponseMixin, View):
+    model = Course
+    template_name = "course/list.html"
+
+    def get(self, request, subject=None):
+        subjects = Subject.objects.annotate(total_courses=Count("courses"))
+        courses = Course.objects.annotate(total_modules=Count("modules"))
+        if subject:
+            try:
+                subject = get_object_or_404(Subject, slug=subject)
+            except Subject.DoesNotExist:
+                print("the provided slug isnt correct")
+            courses = courses.filter(subject=subject)
+        return self.render_to_response(
+            {"subjects": subjects, "subject": subject, "courses": courses}
+        )
