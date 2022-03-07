@@ -4,6 +4,7 @@ from .forms import ModuleFormSet
 
 # imports from django
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -189,3 +190,8 @@ class CourseList(TemplateResponseMixin, View):
         return self.render_to_response(
             {"subjects": subjects, "subject": subject, "courses": courses}
         )
+
+
+class CourseDetails(DetailView):
+    template_name = "course/details.html"
+    model = Course
