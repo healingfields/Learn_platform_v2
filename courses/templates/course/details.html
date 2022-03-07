@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block title %} {{ object.title}} {% endblock %}
+<!-- comment  -->
+{% block content %}
+
+<h1>{{ object.title }}</h1>
+<div>
+  <h2>Overview</h2>
+  <p>
+    {{object.subject}}, {{object.modules.count}} modules, instructor
+    {{course.owner}}
+  </p>
+  <p>{{course.overview}}</p>
+</div>
+{% endblock %}
